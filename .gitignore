@@ -19,3 +19,6 @@ env/
 
 # Claude
 .claude/
+
+# Frontend (deployed separately via Vercel from its own repo)
+frontend/
