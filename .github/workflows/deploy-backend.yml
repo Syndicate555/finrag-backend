@@ -1,0 +1,70 @@
+name: Deploy Backend to Azure Container Apps
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch:
+
+env:
+  ACR_NAME: cac2a1babdc1acr
+  ACR_LOGIN_SERVER: cac2a1babdc1acr.azurecr.io
+  IMAGE_NAME: pwc-rag-api
+  RESOURCE_GROUP: pwc-rag-rg
+  CONTAINER_APP_NAME: pwc-rag-api
+  CONTAINER_APP_ENV: pwc-rag-env
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Container Apps
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          containerAppName: ${{ env.CONTAINER_APP_NAME }}
+          containerAppEnvironment: ${{ env.CONTAINER_APP_ENV }}
+          imageToDeploy: ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          targetPort: 8000
+          ingress: external
+          registryUrl: ${{ env.ACR_LOGIN_SERVER }}
+          registryUsername: ${{ secrets.ACR_USERNAME }}
+          registryPassword: ${{ secrets.ACR_PASSWORD }}
+          environmentVariables: >-
+            OPENAI_API_KEY=secretref:openai-api-key
+            PINECONE_API_KEY=secretref:pinecone-api-key
+            PINECONE_INDEX_NAME=pwc-rag
+            SUPABASE_URL=secretref:supabase-url
+            SUPABASE_KEY=secretref:supabase-key
+            SUPABASE_BUCKET_NAME=pwc-rag
+            AZURE_DI_ENABLED=true
+            AZURE_DI_ENDPOINT=secretref:azure-di-endpoint
+            AZURE_DI_KEY=secretref:azure-di-key
+            CORS_ORIGINS=["http://localhost:3000"]
