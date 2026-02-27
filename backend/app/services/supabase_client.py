@@ -151,7 +151,7 @@ def get_messages(thread_id: str) -> list[dict]:
         client.table("messages")
         .select("*")
         .eq("thread_id", thread_id)
-        .order("created_at", desc=True)
+        .order("created_at", desc=False)
         .execute()
     )
     return result.data
