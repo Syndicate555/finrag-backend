@@ -64,6 +64,6 @@ jobs:
               AZURE_DI_ENABLED=true \
               AZURE_DI_ENDPOINT="${{ secrets.AZURE_DI_ENDPOINT }}" \
               AZURE_DI_KEY="${{ secrets.AZURE_DI_KEY }}" \
-              'CORS_ORIGINS=["http://localhost:3000"]' \
+              'CORS_ORIGINS=["https://finrag.info","https://www.finrag.info","https://financial-2juov3jtm-risk-guardian.vercel.app","http://localhost:3000"]' \
             --min-replicas 0 \
             --max-replicas 1
