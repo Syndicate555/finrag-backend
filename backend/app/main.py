@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -5,6 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.routers import chat, documents, reset, sections
+
+if os.environ.get("APPLICATIONINSIGHTS_CONNECTION_STRING"):
+    from azure.monitor.opentelemetry import configure_azure_monitor
+
+    configure_azure_monitor()
 
 
 @asynccontextmanager
