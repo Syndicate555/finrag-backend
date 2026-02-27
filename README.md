@@ -247,57 +247,60 @@ sequenceDiagram
 
 ```mermaid
 erDiagram
-    documents ||--o{ document_sections : "has"
-    documents ||--o{ threads : "discussed in"
-    threads ||--o{ messages : "contains"
-    messages ||--o| message_feedback : "has"
-    document_sections ||--o{ document_sections : "parent of"
+    documents ||--o{ document_sections : has
+    documents ||--o{ threads : has
+    threads ||--o{ messages : contains
+    messages ||--o| message_feedback : has
 
     documents {
-        uuid id PK
+        uuid id
         text filename
         text blob_url
-        text status "pending | processing | ready | failed"
+        text status
         int page_count
         jsonb sections
         timestamptz created_at
     }
 
     document_sections {
-        uuid id PK
-        uuid document_id FK
+        uuid id
+        uuid document_id
         text heading
-        int level "1 or 2"
+        int level
         int start_page
         int end_page
-        uuid parent_section_id FK "nullable"
+        uuid parent_section_id
     }
 
     threads {
-        uuid id PK
-        uuid document_id FK "nullable"
+        uuid id
+        uuid document_id
         text title
         timestamptz created_at
         timestamptz updated_at
     }
 
     messages {
-        uuid id PK
-        uuid thread_id FK
-        text role "user | assistant"
+        uuid id
+        uuid thread_id
+        text role
         text content
-        text message_type "kb | general | clarification"
+        text message_type
         jsonb citations
         jsonb clarification_chips
         timestamptz created_at
     }
 
     message_feedback {
-        uuid message_id PK_FK
-        smallint signal "-1 or 1"
+        uuid message_id
+        smallint signal
         timestamptz created_at
     }
 ```
+
+> **Status values**: `pending` → `processing` → `ready` | `failed`
+> **Roles**: `user` | `assistant` · **Message types**: `kb` | `general` | `clarification` · **Feedback signal**: `+1` (like) | `-1` (dislike)
+> **Cascade deletes**: Deleting a document removes its sections, threads, messages, and feedback.
 
 ---
 
