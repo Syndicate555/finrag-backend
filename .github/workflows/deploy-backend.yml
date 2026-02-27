@@ -58,13 +58,13 @@ jobs:
           registryUsername: ${{ secrets.ACR_USERNAME }}
           registryPassword: ${{ secrets.ACR_PASSWORD }}
           environmentVariables: >-
-            OPENAI_API_KEY=secretref:openai-api-key
-            PINECONE_API_KEY=secretref:pinecone-api-key
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}
             PINECONE_INDEX_NAME=pwc-rag
-            SUPABASE_URL=secretref:supabase-url
-            SUPABASE_KEY=secretref:supabase-key
+            SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+            SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}
             SUPABASE_BUCKET_NAME=pwc-rag
             AZURE_DI_ENABLED=true
-            AZURE_DI_ENDPOINT=secretref:azure-di-endpoint
-            AZURE_DI_KEY=secretref:azure-di-key
-            CORS_ORIGINS=["http://localhost:3000"]
+            AZURE_DI_ENDPOINT=${{ secrets.AZURE_DI_ENDPOINT }}
+            AZURE_DI_KEY=${{ secrets.AZURE_DI_KEY }}
+            CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}
