@@ -50,17 +50,11 @@ jobs:
       - name: Deploy to Container Apps
         run: |
           az extension add --name containerapp --upgrade --yes
-          az containerapp create \
+          az containerapp update \
             --name ${{ env.CONTAINER_APP_NAME }} \
             --resource-group ${{ env.RESOURCE_GROUP }} \
-            --environment ${{ env.CONTAINER_APP_ENV }} \
             --image ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            --target-port 8000 \
-            --ingress external \
-            --registry-server ${{ env.ACR_LOGIN_SERVER }} \
-            --registry-username ${{ secrets.ACR_USERNAME }} \
-            --registry-password ${{ secrets.ACR_PASSWORD }} \
-            --env-vars \
+            --set-env-vars \
               OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
               PINECONE_API_KEY="${{ secrets.PINECONE_API_KEY }}" \
               PINECONE_INDEX_NAME=pwc-rag \
@@ -70,6 +64,6 @@ jobs:
               AZURE_DI_ENABLED=true \
               AZURE_DI_ENDPOINT="${{ secrets.AZURE_DI_ENDPOINT }}" \
               AZURE_DI_KEY="${{ secrets.AZURE_DI_KEY }}" \
-              CORS_ORIGINS="${{ secrets.CORS_ORIGINS }}" \
+              'CORS_ORIGINS=["http://localhost:3000"]' \
             --min-replicas 0 \
             --max-replicas 1
