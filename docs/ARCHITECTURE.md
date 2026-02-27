@@ -98,16 +98,16 @@ Query:   Question → Route → Retrieve context → Stream LLM answer + citatio
 
 ### Stack
 
-| Technology | Purpose |
-|-----------|---------|
-| Next.js 16 + React 19 | Framework, App Router, React Compiler |
-| TypeScript (strict) | Type safety with branded types |
-| Zustand | Thread list state management |
-| React Context | Document selection state |
-| Tailwind CSS v4 + shadcn | Styling and accessible UI components |
-| react-markdown + remark-gfm | Rendering LLM responses with tables |
-| react-dropzone | PDF upload drag-and-drop |
-| GSAP | Landing page animations |
+| Technology                  | Purpose                               |
+| --------------------------- | ------------------------------------- |
+| Next.js 16 + React 19       | Framework, App Router, React Compiler |
+| TypeScript (strict)         | Type safety with branded types        |
+| Zustand                     | Thread list state management          |
+| React Context               | Document selection state              |
+| Tailwind CSS v4 + shadcn    | Styling and accessible UI components  |
+| react-markdown + remark-gfm | Rendering LLM responses with tables   |
+| react-dropzone              | PDF upload drag-and-drop              |
+| GSAP                        | Landing page animations               |
 
 ### Route Structure
 
@@ -139,27 +139,27 @@ The frontend uses `NEXT_PUBLIC_API_URL` to reach the backend. In local dev, `nex
 
 ### Key UI Components
 
-| Component | Role |
-|-----------|------|
-| `ChatContainer` | Orchestrator — manages layout, loads messages, coordinates streaming |
-| `ChatInput` | Auto-resizing textarea, Enter to send, Shift+Enter for newline |
-| `MessageBubble` | Renders markdown, shows feedback buttons on hover, displays citations |
-| `CitationBadge` | Hoverable badge showing page range, section, relevance score |
-| `SectionChips` | Interactive buttons for clarification (user picks a document section) |
-| `SourcePanel` | Right sidebar — document list with status indicators, click to select |
-| `Sidebar` | Left nav — thread list with search, upload button, factory reset |
-| `UploadModal` | Drag-drop PDF upload with 3-step processing progress animation |
-| `MarkdownRenderer` | Custom react-markdown with styled tables, code blocks, headings |
+| Component          | Role                                                                  |
+| ------------------ | --------------------------------------------------------------------- |
+| `ChatContainer`    | Orchestrator — manages layout, loads messages, coordinates streaming  |
+| `ChatInput`        | Auto-resizing textarea, Enter to send, Shift+Enter for newline        |
+| `MessageBubble`    | Renders markdown, shows feedback buttons on hover, displays citations |
+| `CitationBadge`    | Hoverable badge showing page range, section, relevance score          |
+| `SectionChips`     | Interactive buttons for clarification (user picks a document section) |
+| `SourcePanel`      | Right sidebar — document list with status indicators, click to select |
+| `Sidebar`          | Left nav — thread list with search, upload button, factory reset      |
+| `UploadModal`      | Drag-drop PDF upload with 3-step processing progress animation        |
+| `MarkdownRenderer` | Custom react-markdown with styled tables, code blocks, headings       |
 
 ### Branded Types
 
 The frontend mirrors the backend's type system using TypeScript branded types:
 
 ```typescript
-type DocumentId = string & { readonly __brand: "DocumentId" }
-type ThreadId   = string & { readonly __brand: "ThreadId" }
-type MessageId  = string & { readonly __brand: "MessageId" }
-type SectionId  = string & { readonly __brand: "SectionId" }
+type DocumentId = string & { readonly __brand: "DocumentId" };
+type ThreadId = string & { readonly __brand: "ThreadId" };
+type MessageId = string & { readonly __brand: "MessageId" };
+type SectionId = string & { readonly __brand: "SectionId" };
 ```
 
 This prevents accidentally passing a `ThreadId` where a `DocumentId` is expected, catching bugs at compile time.
@@ -170,17 +170,17 @@ This prevents accidentally passing a `ThreadId` where a `DocumentId` is expected
 
 ### Stack
 
-| Technology | Purpose |
-|-----------|---------|
-| FastAPI + Uvicorn | Async HTTP server |
-| Pydantic Settings | Configuration from environment |
-| OpenAI SDK (async) | Embeddings + chat completions |
-| Pinecone | Vector store for semantic search |
-| Supabase (Python) | PostgreSQL + object storage |
+| Technology                  | Purpose                           |
+| --------------------------- | --------------------------------- |
+| FastAPI + Uvicorn           | Async HTTP server                 |
+| Pydantic Settings           | Configuration from environment    |
+| OpenAI SDK (async)          | Embeddings + chat completions     |
+| Pinecone                    | Vector store for semantic search  |
+| Supabase (Python)           | PostgreSQL + object storage       |
 | Azure Document Intelligence | Structured PDF parsing (optional) |
-| pdfplumber + PyMuPDF | Fallback PDF parsing |
-| tiktoken | Token counting for chunking |
-| sse-starlette | Server-Sent Events streaming |
+| pdfplumber + PyMuPDF        | Fallback PDF parsing              |
+| tiktoken                    | Token counting for chunking       |
+| sse-starlette               | Server-Sent Events streaming      |
 
 ### Code Organization
 
@@ -357,12 +357,12 @@ This avoids creating new connections per request while keeping the code testable
 
 ## 6. External Services
 
-| Service | What It Does | Failure Impact | Cost Model |
-|---------|-------------|----------------|------------|
-| **OpenAI** | Embeddings (`text-embedding-3-large`), chat (`gpt-4o`), routing (`gpt-4o-mini`) | System cannot embed or answer | Pay-per-token |
-| **Pinecone** | Vector storage and semantic similarity search | No retrieval — KB queries fail | Free tier available, then pay-per-query |
-| **Supabase** | PostgreSQL (metadata, threads, messages), object storage (PDF files) | No persistence — nothing works | Free tier generous, then pay-per-use |
-| **Azure Document Intelligence** | Structured PDF parsing (tables, headings, sections) | Graceful fallback to pdfplumber | Free tier: 20 pages/doc limit |
+| Service                         | What It Does                                                                    | Failure Impact                  | Cost Model                              |
+| ------------------------------- | ------------------------------------------------------------------------------- | ------------------------------- | --------------------------------------- |
+| **OpenAI**                      | Embeddings (`text-embedding-3-large`), chat (`gpt-4o`), routing (`gpt-4o-mini`) | System cannot embed or answer   | Pay-per-token                           |
+| **Pinecone**                    | Vector storage and semantic similarity search                                   | No retrieval — KB queries fail  | Free tier available, then pay-per-query |
+| **Supabase**                    | PostgreSQL (metadata, threads, messages), object storage (PDF files)            | No persistence — nothing works  | Free tier generous, then pay-per-use    |
+| **Azure Document Intelligence** | Structured PDF parsing (tables, headings, sections)                             | Graceful fallback to pdfplumber | Free tier: 20 pages/doc limit           |
 
 ### Service Interaction Diagram
 
@@ -485,12 +485,12 @@ Deleting a **document** cascades to: `document_sections`, `threads` → `message
 
 ### Why Azure Container Apps?
 
-| Option | Overhead | Cost | Verdict |
-|--------|----------|------|---------|
-| **Container Apps** | Zero infra, auto-HTTPS, scale-to-zero | ~$0 idle | **Chosen** |
-| App Service | Always-on plan required | ~$13+/mo min | More expensive |
-| ACI | No auto-scaling, no HTTPS | Pay-per-second | Too manual |
-| AKS | Full Kubernetes | Overkill | Way too much |
+| Option             | Overhead                              | Cost           | Verdict        |
+| ------------------ | ------------------------------------- | -------------- | -------------- |
+| **Container Apps** | Zero infra, auto-HTTPS, scale-to-zero | ~$0 idle       | **Chosen**     |
+| App Service        | Always-on plan required               | ~$13+/mo min   | More expensive |
+| ACI                | No auto-scaling, no HTTPS             | Pay-per-second | Too manual     |
+| AKS                | Full Kubernetes                       | Overkill       | Way too much   |
 
 Container Apps was chosen because it provides **serverless containers** — the app scales to zero when idle (costs nothing), scales up on demand, and includes automatic HTTPS with no load balancer or certificate management.
 
@@ -542,14 +542,14 @@ Push to main (backend changes)
 
 ### Secrets (GitHub Repository)
 
-| Secret | Purpose |
-|--------|---------|
-| `ACR_USERNAME` / `ACR_PASSWORD` | Push Docker images to Azure Container Registry |
-| `AZURE_CLIENT_ID` / `AZURE_CLIENT_SECRET` / `AZURE_TENANT_ID` / `AZURE_SUBSCRIPTION_ID` | Service principal for `az login` |
-| `OPENAI_API_KEY` | Passed as env var to container |
-| `PINECONE_API_KEY` | Passed as env var to container |
-| `SUPABASE_URL` / `SUPABASE_KEY` | Passed as env var to container |
-| `AZURE_DI_ENDPOINT` / `AZURE_DI_KEY` | Passed as env var to container |
+| Secret                                                                                  | Purpose                                        |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `ACR_USERNAME` / `ACR_PASSWORD`                                                         | Push Docker images to Azure Container Registry |
+| `AZURE_CLIENT_ID` / `AZURE_CLIENT_SECRET` / `AZURE_TENANT_ID` / `AZURE_SUBSCRIPTION_ID` | Service principal for `az login`               |
+| `OPENAI_API_KEY`                                                                        | Passed as env var to container                 |
+| `PINECONE_API_KEY`                                                                      | Passed as env var to container                 |
+| `SUPABASE_URL` / `SUPABASE_KEY`                                                         | Passed as env var to container                 |
+| `AZURE_DI_ENDPOINT` / `AZURE_DI_KEY`                                                    | Passed as env var to container                 |
 
 ### Frontend Deployment
 
@@ -572,12 +572,14 @@ docker compose up
 ```
 
 This starts both services:
+
 - Backend on `http://localhost:8000` (with hot reload)
 - Frontend on `http://localhost:3000` (with hot reload)
 
 ### Option 2: Run Separately
 
 **Backend:**
+
 ```bash
 cd backend
 python -m venv .venv && source .venv/bin/activate
@@ -586,6 +588,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 **Frontend:**
+
 ```bash
 cd frontend
 npm install
@@ -619,28 +622,28 @@ gh workflow run deploy-backend.yml --repo Syndicate555/finrag-backend
 
 ### Architecture Decisions
 
-| Decision | Rationale | Trade-off |
-|----------|-----------|-----------|
-| **Separate frontend/backend repos** | Independent deploy cycles; Vercel for frontend, Azure for backend | Slightly more complex local setup |
-| **SSE for chat streaming** | Simpler than WebSockets; works through CDNs and proxies; one-directional is sufficient | No bidirectional communication (not needed here) |
-| **Pinecone over pgvector** | Purpose-built vector DB; no self-managed index tuning; sub-100ms queries | Additional external dependency and cost |
-| **Supabase over raw PostgreSQL** | Managed Postgres + built-in object storage for PDFs + generous free tier | Vendor lock-in for storage API |
-| **Azure Container Apps over Lambda/Cloud Run** | Runs a long-lived container (good for streaming); scale-to-zero; no cold start penalty for short requests | Azure ecosystem dependency |
-| **pdfplumber fallback** | Not everyone has Azure DI; system works with zero Azure dependencies | Heuristic heading detection is less accurate |
-| **Zustand + Context (not Redux)** | Minimal boilerplate; thread list is the only truly global state | Less structured than Redux for large teams |
-| **Branded types** | Prevents ID mix-ups at compile time (`DocumentId` vs `ThreadId`) | Slightly more verbose type definitions |
+| Decision                                       | Rationale                                                                                                 | Trade-off                                        |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| **Separate frontend/backend repos**            | Independent deploy cycles; Vercel for frontend, Azure for backend                                         | Slightly more complex local setup                |
+| **SSE for chat streaming**                     | Simpler than WebSockets; works through CDNs and proxies; one-directional is sufficient                    | No bidirectional communication (not needed here) |
+| **Pinecone over pgvector**                     | Purpose-built vector DB; no self-managed index tuning; sub-100ms queries                                  | Additional external dependency and cost          |
+| **Supabase over raw PostgreSQL**               | Managed Postgres + built-in object storage for PDFs + generous free tier                                  | Vendor lock-in for storage API                   |
+| **Azure Container Apps over Lambda/Cloud Run** | Runs a long-lived container (good for streaming); scale-to-zero; no cold start penalty for short requests | Azure ecosystem dependency                       |
+| **pdfplumber fallback**                        | Not everyone has Azure DI; system works with zero Azure dependencies                                      | Heuristic heading detection is less accurate     |
+| **Zustand + Context (not Redux)**              | Minimal boilerplate; thread list is the only truly global state                                           | Less structured than Redux for large teams       |
+| **Branded types**                              | Prevents ID mix-ups at compile time (`DocumentId` vs `ThreadId`)                                          | Slightly more verbose type definitions           |
 
 ### RAG-Specific Decisions
 
-| Decision | Rationale | Trade-off |
-|----------|-----------|-----------|
-| **512-token chunks with 64-token overlap** | Balance between context window usage and retrieval granularity | May split semantic units; overlap helps but isn't perfect |
-| **top_k=20 retrieval** | Cast a wide net to find all relevant context | More tokens sent to LLM (higher cost per query) |
-| **Separate table chunks** | Tables have different structure than prose; embedding them separately with section context improves retrieval | More chunks per document |
-| **Query routing with GPT-4o-mini** | Cheap classification (~0.001 cents) saves expensive retrieval on general questions | Adds one LLM call of latency (~200ms) |
-| **Store full chunk text in Pinecone metadata** | Avoids a database round-trip to reconstruct citations | Higher Pinecone storage cost |
-| **temp=0.1 for KB, temp=0.3 for general** | Low temperature for factual document answers; slightly higher for general knowledge | KB answers may feel repetitive; general answers may vary |
-| **Section-level clarification** | Prevents poor answers on ambiguous queries ("tell me about banking" — which section?) | Extra interaction step for the user |
+| Decision                                       | Rationale                                                                                                     | Trade-off                                                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **512-token chunks with 64-token overlap**     | Balance between context window usage and retrieval granularity                                                | May split semantic units; overlap helps but isn't perfect |
+| **top_k=20 retrieval**                         | Cast a wide net to find all relevant context                                                                  | More tokens sent to LLM (higher cost per query)           |
+| **Separate table chunks**                      | Tables have different structure than prose; embedding them separately with section context improves retrieval | More chunks per document                                  |
+| **Query routing with GPT-4o-mini**             | Cheap classification (~0.001 cents) saves expensive retrieval on general questions                            | Adds one LLM call of latency (~200ms)                     |
+| **Store full chunk text in Pinecone metadata** | Avoids a database round-trip to reconstruct citations                                                         | Higher Pinecone storage cost                              |
+| **temp=0.1 for KB, temp=0.3 for general**      | Low temperature for factual document answers; slightly higher for general knowledge                           | KB answers may feel repetitive; general answers may vary  |
+| **Section-level clarification**                | Prevents poor answers on ambiguous queries ("tell me about banking" — which section?)                         | Extra interaction step for the user                       |
 
 ### What's Intentionally Not Built
 
@@ -655,31 +658,31 @@ gh workflow run deploy-backend.yml --repo Syndicate555/finrag-backend
 
 ### Backend (`backend/.env`)
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `OPENAI_API_KEY` | Yes | — | OpenAI API key for embeddings and chat |
-| `PINECONE_API_KEY` | Yes | — | Pinecone API key |
-| `PINECONE_INDEX_NAME` | No | `pwc-rag` | Pinecone index name |
-| `SUPABASE_URL` | Yes | — | Supabase project URL |
-| `SUPABASE_KEY` | Yes | — | Supabase service role key |
-| `SUPABASE_BUCKET_NAME` | No | `pwc-rag` | Supabase storage bucket name |
-| `AZURE_DI_ENABLED` | No | `false` | Enable Azure Document Intelligence |
-| `AZURE_DI_ENDPOINT` | No | `""` | Azure DI endpoint URL |
-| `AZURE_DI_KEY` | No | `""` | Azure DI API key |
-| `CORS_ORIGINS` | No | `["http://localhost:3000"]` | Allowed origins (JSON array) |
-| `OPENAI_EMBEDDING_MODEL` | No | `text-embedding-3-large` | Embedding model |
-| `OPENAI_CHAT_MODEL` | No | `gpt-4o` | Chat completion model |
-| `OPENAI_ROUTER_MODEL` | No | `gpt-4o-mini` | Query classification model |
-| `EMBEDDING_DIMENSIONS` | No | `1536` | Vector dimensions |
-| `CHUNK_MAX_TOKENS` | No | `512` | Max tokens per chunk |
-| `CHUNK_OVERLAP_TOKENS` | No | `64` | Overlap between chunks |
-| `RETRIEVAL_TOP_K` | No | `20` | Number of chunks to retrieve |
+| Variable                 | Required | Default                     | Description                            |
+| ------------------------ | -------- | --------------------------- | -------------------------------------- |
+| `OPENAI_API_KEY`         | Yes      | —                           | OpenAI API key for embeddings and chat |
+| `PINECONE_API_KEY`       | Yes      | —                           | Pinecone API key                       |
+| `PINECONE_INDEX_NAME`    | No       | `pwc-rag`                   | Pinecone index name                    |
+| `SUPABASE_URL`           | Yes      | —                           | Supabase project URL                   |
+| `SUPABASE_KEY`           | Yes      | —                           | Supabase service role key              |
+| `SUPABASE_BUCKET_NAME`   | No       | `pwc-rag`                   | Supabase storage bucket name           |
+| `AZURE_DI_ENABLED`       | No       | `false`                     | Enable Azure Document Intelligence     |
+| `AZURE_DI_ENDPOINT`      | No       | `""`                        | Azure DI endpoint URL                  |
+| `AZURE_DI_KEY`           | No       | `""`                        | Azure DI API key                       |
+| `CORS_ORIGINS`           | No       | `["http://localhost:3000"]` | Allowed origins (JSON array)           |
+| `OPENAI_EMBEDDING_MODEL` | No       | `text-embedding-3-large`    | Embedding model                        |
+| `OPENAI_CHAT_MODEL`      | No       | `gpt-4o`                    | Chat completion model                  |
+| `OPENAI_ROUTER_MODEL`    | No       | `gpt-4o-mini`               | Query classification model             |
+| `EMBEDDING_DIMENSIONS`   | No       | `1536`                      | Vector dimensions                      |
+| `CHUNK_MAX_TOKENS`       | No       | `512`                       | Max tokens per chunk                   |
+| `CHUNK_OVERLAP_TOKENS`   | No       | `64`                        | Overlap between chunks                 |
+| `RETRIEVAL_TOP_K`        | No       | `20`                        | Number of chunks to retrieve           |
 
 ### Frontend (`frontend/.env.local`)
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `NEXT_PUBLIC_API_URL` | Yes | — | Backend API base URL |
+| Variable              | Required | Default | Description          |
+| --------------------- | -------- | ------- | -------------------- |
+| `NEXT_PUBLIC_API_URL` | Yes      | —       | Backend API base URL |
 
 ---
 
@@ -687,47 +690,47 @@ gh workflow run deploy-backend.yml --repo Syndicate555/finrag-backend
 
 ### Documents
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/documents/upload` | Upload PDF (multipart form, max 50MB) |
-| `GET` | `/api/documents` | List all documents |
-| `GET` | `/api/documents/{id}/status` | Get document processing status |
-| `GET` | `/api/documents/{id}/sections` | Get document section hierarchy |
-| `DELETE` | `/api/documents/{id}` | Delete document (cascades to vectors, threads) |
+| Method   | Path                           | Description                                    |
+| -------- | ------------------------------ | ---------------------------------------------- |
+| `POST`   | `/api/documents/upload`        | Upload PDF (multipart form, max 50MB)          |
+| `GET`    | `/api/documents`               | List all documents                             |
+| `GET`    | `/api/documents/{id}/status`   | Get document processing status                 |
+| `GET`    | `/api/documents/{id}/sections` | Get document section hierarchy                 |
+| `DELETE` | `/api/documents/{id}`          | Delete document (cascades to vectors, threads) |
 
 ### Chat
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/chat` | Send message, get streamed SSE response |
+| Method | Path                | Description                              |
+| ------ | ------------------- | ---------------------------------------- |
+| `POST` | `/api/chat`         | Send message, get streamed SSE response  |
 | `POST` | `/api/chat/clarify` | Send clarification with selected section |
 
 ### Threads & Messages
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/threads` | List all threads |
-| `GET` | `/api/threads/{id}/messages` | Get messages for a thread |
-| `DELETE` | `/api/threads/{id}` | Delete thread and messages |
-| `PUT` | `/api/messages/{id}/feedback` | Submit feedback (like/dislike) |
-| `DELETE` | `/api/messages/{id}/feedback` | Remove feedback |
+| Method   | Path                          | Description                    |
+| -------- | ----------------------------- | ------------------------------ |
+| `GET`    | `/api/threads`                | List all threads               |
+| `GET`    | `/api/threads/{id}/messages`  | Get messages for a thread      |
+| `DELETE` | `/api/threads/{id}`           | Delete thread and messages     |
+| `PUT`    | `/api/messages/{id}/feedback` | Submit feedback (like/dislike) |
+| `DELETE` | `/api/messages/{id}/feedback` | Remove feedback                |
 
 ### System
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/health` | Health check → `{"status": "ok"}` |
+| Method   | Path         | Description                       |
+| -------- | ------------ | --------------------------------- |
+| `GET`    | `/health`    | Health check → `{"status": "ok"}` |
 | `DELETE` | `/api/reset` | Factory reset (delete everything) |
 
 ### SSE Event Types (from `/api/chat`)
 
-| Event | Data | When |
-|-------|------|------|
-| `thread_id` | UUID string | First message creates a new thread |
-| `citations` | JSON array of citation objects | After retrieval, before LLM streaming |
-| `token` | Text delta | Each token from GPT-4o stream |
-| `clarification` | JSON array of section chips | When query needs clarification |
-| `done` | Empty or final citations | Stream complete |
+| Event           | Data                           | When                                  |
+| --------------- | ------------------------------ | ------------------------------------- |
+| `thread_id`     | UUID string                    | First message creates a new thread    |
+| `citations`     | JSON array of citation objects | After retrieval, before LLM streaming |
+| `token`         | Text delta                     | Each token from GPT-4o stream         |
+| `clarification` | JSON array of section chips    | When query needs clarification        |
+| `done`          | Empty or final citations       | Stream complete                       |
 
 ---
 
@@ -784,4 +787,4 @@ az containerapp update --name pwc-rag-api --resource-group pwc-rag-rg --min-repl
 
 ---
 
-*Last updated: 2026-02-27*
+_Last updated: 2026-02-27_

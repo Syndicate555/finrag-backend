@@ -207,7 +207,7 @@ graph TB
 
 ### CI/CD Pipeline
 
-Every push to `main` that changes `backend/**` triggers an automated build and deploy:
+Every push to `main` that changes `backend/**` triggers an automated build and deploy
 
 ```mermaid
 sequenceDiagram
@@ -234,12 +234,12 @@ sequenceDiagram
 
 ### Deployment Targets
 
-| Component | Platform | URL | Deploys On |
-|-----------|----------|-----|------------|
-| **Backend API** | Azure Container Apps | `pwc-rag-api.politemeadow-4143bf92.westus.azurecontainerapps.io` | Push to `main` (backend changes) |
-| **Frontend** | Vercel | `finrag.info` | Push to `main` (frontend repo) |
-| **Database** | Supabase | Managed PostgreSQL | Manual migrations |
-| **Vector Store** | Pinecone | Managed index: `pwc-rag` | Populated at document upload time |
+| Component        | Platform             | URL                                                              | Deploys On                        |
+| ---------------- | -------------------- | ---------------------------------------------------------------- | --------------------------------- |
+| **Backend API**  | Azure Container Apps | `pwc-rag-api.politemeadow-4143bf92.westus.azurecontainerapps.io` | Push to `main` (backend changes)  |
+| **Frontend**     | Vercel               | `finrag.info`                                                    | Push to `main` (frontend repo)    |
+| **Database**     | Supabase             | Managed PostgreSQL                                               | Manual migrations                 |
+| **Vector Store** | Pinecone             | Managed index: `pwc-rag`                                         | Populated at document upload time |
 
 ---
 
@@ -298,8 +298,7 @@ erDiagram
     }
 ```
 
-> **Status values**: `pending` → `processing` → `ready` | `failed`
-> **Roles**: `user` | `assistant` · **Message types**: `kb` | `general` | `clarification` · **Feedback signal**: `+1` (like) | `-1` (dislike)
+> **Status values**: `pending` → `processing` → `ready` | `failed` > **Roles**: `user` | `assistant` · **Message types**: `kb` | `general` | `clarification` · **Feedback signal**: `+1` (like) | `-1` (dislike)
 > **Cascade deletes**: Deleting a document removes its sections, threads, messages, and feedback.
 
 ---
@@ -308,42 +307,42 @@ erDiagram
 
 ### Backend
 
-| Technology | Role |
-|-----------|------|
-| **Python 3.12** | Runtime |
-| **FastAPI** | Async HTTP framework |
-| **Uvicorn** | ASGI server |
-| **OpenAI SDK** | Embeddings (text-embedding-3-large) + Chat (GPT-4o) + Routing (GPT-4o-mini) |
-| **Pinecone** | Vector storage and similarity search (1536 dimensions) |
-| **Supabase** | PostgreSQL database + PDF object storage |
+| Technology                      | Role                                                                                     |
+| ------------------------------- | ---------------------------------------------------------------------------------------- |
+| **Python 3.12**                 | Runtime                                                                                  |
+| **FastAPI**                     | Async HTTP framework                                                                     |
+| **Uvicorn**                     | ASGI server                                                                              |
+| **OpenAI SDK**                  | Embeddings (text-embedding-3-large) + Chat (GPT-4o) + Routing (GPT-4o-mini)              |
+| **Pinecone**                    | Vector storage and similarity search (1536 dimensions)                                   |
+| **Supabase**                    | PostgreSQL database + PDF object storage                                                 |
 | **Azure Document Intelligence** | Structured PDF parsing — tables, headings, sections (optional, with pdfplumber fallback) |
-| **pdfplumber + PyMuPDF** | Fallback PDF parsing with font-size heuristics |
-| **tiktoken** | Token counting for chunk sizing |
-| **sse-starlette** | Server-Sent Events for streaming responses |
-| **Pydantic Settings** | Typed configuration from environment variables |
+| **pdfplumber + PyMuPDF**        | Fallback PDF parsing with font-size heuristics                                           |
+| **tiktoken**                    | Token counting for chunk sizing                                                          |
+| **sse-starlette**               | Server-Sent Events for streaming responses                                               |
+| **Pydantic Settings**           | Typed configuration from environment variables                                           |
 
 ### Frontend
 
-| Technology | Role |
-|-----------|------|
-| **Next.js 16** | React framework with App Router |
-| **React 19** | UI library with React Compiler |
-| **TypeScript** | Strict mode with branded types |
-| **Zustand** | Thread list state management |
-| **Tailwind CSS v4** | Utility-first styling |
-| **shadcn/ui + Radix** | Accessible component primitives |
-| **react-markdown** | Markdown rendering with GFM tables |
-| **react-dropzone** | PDF upload drag-and-drop |
+| Technology            | Role                               |
+| --------------------- | ---------------------------------- |
+| **Next.js 16**        | React framework with App Router    |
+| **React 19**          | UI library with React Compiler     |
+| **TypeScript**        | Strict mode with branded types     |
+| **Zustand**           | Thread list state management       |
+| **Tailwind CSS v4**   | Utility-first styling              |
+| **shadcn/ui + Radix** | Accessible component primitives    |
+| **react-markdown**    | Markdown rendering with GFM tables |
+| **react-dropzone**    | PDF upload drag-and-drop           |
 
 ### Infrastructure
 
-| Technology | Role |
-|-----------|------|
-| **Azure Container Apps** | Serverless container hosting (scale-to-zero) |
-| **Azure Container Registry** | Docker image storage |
-| **GitHub Actions** | CI/CD — build, push, deploy on every push to main |
-| **Vercel** | Frontend hosting with global CDN |
-| **Docker** | Containerization (Python 3.12-slim base) |
+| Technology                   | Role                                              |
+| ---------------------------- | ------------------------------------------------- |
+| **Azure Container Apps**     | Serverless container hosting (scale-to-zero)      |
+| **Azure Container Registry** | Docker image storage                              |
+| **GitHub Actions**           | CI/CD — build, push, deploy on every push to main |
+| **Vercel**                   | Frontend hosting with global CDN                  |
+| **Docker**                   | Containerization (Python 3.12-slim base)          |
 
 ---
 
@@ -351,49 +350,49 @@ erDiagram
 
 ### Documents
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/documents/upload` | Upload a PDF (multipart, max 50MB) |
-| `GET` | `/api/documents` | List all documents |
-| `GET` | `/api/documents/:id/status` | Check processing status |
-| `GET` | `/api/documents/:id/sections` | Get section hierarchy |
-| `DELETE` | `/api/documents/:id` | Delete document + vectors + threads |
+| Method   | Endpoint                      | Description                         |
+| -------- | ----------------------------- | ----------------------------------- |
+| `POST`   | `/api/documents/upload`       | Upload a PDF (multipart, max 50MB)  |
+| `GET`    | `/api/documents`              | List all documents                  |
+| `GET`    | `/api/documents/:id/status`   | Check processing status             |
+| `GET`    | `/api/documents/:id/sections` | Get section hierarchy               |
+| `DELETE` | `/api/documents/:id`          | Delete document + vectors + threads |
 
 ### Chat
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/chat` | Send message → streamed SSE response |
+| Method | Endpoint            | Description                                       |
+| ------ | ------------------- | ------------------------------------------------- |
+| `POST` | `/api/chat`         | Send message → streamed SSE response              |
 | `POST` | `/api/chat/clarify` | Clarify with selected section → streamed response |
 
 ### Threads & Messages
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/threads` | List all threads |
-| `GET` | `/api/threads/:id/messages` | Get conversation history |
-| `DELETE` | `/api/threads/:id` | Delete thread |
-| `PUT` | `/api/messages/:id/feedback` | Submit feedback (+1 / -1) |
-| `DELETE` | `/api/messages/:id/feedback` | Remove feedback |
+| Method   | Endpoint                     | Description               |
+| -------- | ---------------------------- | ------------------------- |
+| `GET`    | `/api/threads`               | List all threads          |
+| `GET`    | `/api/threads/:id/messages`  | Get conversation history  |
+| `DELETE` | `/api/threads/:id`           | Delete thread             |
+| `PUT`    | `/api/messages/:id/feedback` | Submit feedback (+1 / -1) |
+| `DELETE` | `/api/messages/:id/feedback` | Remove feedback           |
 
 ### System
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/health` | Health check → `{"status": "ok"}` |
+| Method   | Endpoint     | Description                        |
+| -------- | ------------ | ---------------------------------- |
+| `GET`    | `/health`    | Health check → `{"status": "ok"}`  |
 | `DELETE` | `/api/reset` | Factory reset — deletes everything |
 
 ### SSE Event Types
 
 The `/api/chat` endpoint returns a stream of Server-Sent Events:
 
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `thread_id` | UUID string | Emitted once when a new thread is created |
-| `citations` | JSON array | Page ranges, sections, relevance scores — arrives before tokens |
-| `token` | Text delta | Each token from the LLM, streamed in real-time |
-| `clarification` | JSON array | Section chips when the query needs refinement |
-| `done` | Empty | Stream complete |
+| Event           | Payload     | Description                                                     |
+| --------------- | ----------- | --------------------------------------------------------------- |
+| `thread_id`     | UUID string | Emitted once when a new thread is created                       |
+| `citations`     | JSON array  | Page ranges, sections, relevance scores — arrives before tokens |
+| `token`         | Text delta  | Each token from the LLM, streamed in real-time                  |
+| `clarification` | JSON array  | Section chips when the query needs refinement                   |
+| `done`          | Empty       | Stream complete                                                 |
 
 ---
 
@@ -424,6 +423,7 @@ Backend runs at `http://localhost:8000`, frontend at `http://localhost:3000`.
 ### Manual Setup
 
 **Backend:**
+
 ```bash
 cd backend
 python -m venv .venv && source .venv/bin/activate
@@ -432,6 +432,7 @@ uvicorn app.main:app --reload --port 8000
 ```
 
 **Frontend:**
+
 ```bash
 cd frontend
 npm install
@@ -480,6 +481,7 @@ gh run watch --repo Syndicate555/finrag-backend
 ```
 
 **Manual deploy:**
+
 ```bash
 gh workflow run deploy-backend.yml --repo Syndicate555/finrag-backend
 ```
@@ -511,17 +513,17 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the complete operations runbook
 
 ## Design Decisions
 
-| Decision | Rationale |
-|----------|-----------|
-| **Azure Container Apps over Lambda/Cloud Run** | Long-lived container for SSE streaming; scale-to-zero; auto-HTTPS |
-| **Pinecone over pgvector** | Purpose-built vector DB; sub-100ms queries; no index tuning |
-| **Azure DI with pdfplumber fallback** | Best-in-class PDF parsing when available; system works without it |
-| **GPT-4o-mini for routing** | ~$0.001 per classification saves expensive retrieval on general questions |
-| **512-token chunks with 64-token overlap** | Balances retrieval granularity with LLM context utilization |
-| **Store full text in Pinecone metadata** | Avoids extra DB lookups when constructing citations |
-| **SSE over WebSockets** | Simpler; works through CDNs; unidirectional is sufficient for chat |
-| **Zustand + Context (not Redux)** | Thread list is the only global state; minimal boilerplate |
-| **Branded TypeScript types** | Prevents ID mix-ups (`DocumentId` vs `ThreadId`) at compile time |
+| Decision                                       | Rationale                                                                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------- |
+| **Azure Container Apps over Lambda/Cloud Run** | Long-lived container for SSE streaming; scale-to-zero; auto-HTTPS         |
+| **Pinecone over pgvector**                     | Purpose-built vector DB; sub-100ms queries; no index tuning               |
+| **Azure DI with pdfplumber fallback**          | Best-in-class PDF parsing when available; system works without it         |
+| **GPT-4o-mini for routing**                    | ~$0.001 per classification saves expensive retrieval on general questions |
+| **512-token chunks with 64-token overlap**     | Balances retrieval granularity with LLM context utilization               |
+| **Store full text in Pinecone metadata**       | Avoids extra DB lookups when constructing citations                       |
+| **SSE over WebSockets**                        | Simpler; works through CDNs; unidirectional is sufficient for chat        |
+| **Zustand + Context (not Redux)**              | Thread list is the only global state; minimal boilerplate                 |
+| **Branded TypeScript types**                   | Prevents ID mix-ups (`DocumentId` vs `ThreadId`) at compile time          |
 
 ---
 
@@ -567,10 +569,10 @@ finrag-backend/
 
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [**ARCHITECTURE.md**](docs/ARCHITECTURE.md) | Deep dive into system architecture, RAG pipeline, data flow, service integrations, and design trade-offs |
-| [**DEPLOYMENT.md**](docs/DEPLOYMENT.md) | Complete deployment guide — Azure resources, CI/CD pipeline, secrets management, scaling, monitoring, rollback procedures, cost breakdown, and step-by-step runbook |
+| Document                                    | Description                                                                                                                                                         |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [**ARCHITECTURE.md**](docs/ARCHITECTURE.md) | Deep dive into system architecture, RAG pipeline, data flow, service integrations, and design trade-offs                                                            |
+| [**DEPLOYMENT.md**](docs/DEPLOYMENT.md)     | Complete deployment guide — Azure resources, CI/CD pipeline, secrets management, scaling, monitoring, rollback procedures, cost breakdown, and step-by-step runbook |
 
 ---
 
