@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="https://finrag.info">Live Demo</a> ·
+  <a href="https://github.com/Syndicate555/financial-rag">Frontend Repo</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#deployment">Deployment</a> ·
   <a href="docs/ARCHITECTURE.md">Full Architecture Docs</a> ·
@@ -321,7 +322,7 @@ erDiagram
 | **sse-starlette**               | Server-Sent Events for streaming responses                                               |
 | **Pydantic Settings**           | Typed configuration from environment variables                                           |
 
-### Frontend
+### Frontend ([repo](https://github.com/Syndicate555/financial-rag))
 
 | Technology            | Role                               |
 | --------------------- | ---------------------------------- |
