@@ -103,20 +103,20 @@ graph LR
     end
 
     subgraph Retrieval["💬 Query & Response"]
+        direction LR
         Query["User Question"]
-        Guard["Input Guardrail<br/>prompt injection · PII · length"]
-        Rewrite["Query Rewrite<br/>expand acronyms · resolve coreference"]
-        Route["Route<br/>GPT-4o-mini classifier"]
-        HybridSearch["Hybrid Search<br/>semantic (Pinecone top-k=20)<br/>+ BM25 keyword scoring"]
-        Rerank["Cross-Encoder Rerank<br/>Cohere Rerank · top-5"]
-        ContextWindow["Context Assembly<br/>token budget · dedup · order"]
-        Generate["Generate<br/>GPT-4o stream"]
-        OutputGuard["Output Guardrail<br/>hallucination check · toxicity"]
+        Guard["Input Guardrail<br/>prompt injection<br/>PII · length"]
+        Rewrite["Query Rewrite<br/>expand acronyms<br/>resolve coreference"]
+        Route["Route<br/>GPT-4o-mini<br/>classifier"]
+        HybridSearch["Hybrid Search<br/>semantic top-k=20<br/>+ BM25 keyword"]
+        Rerank["Cross-Encoder<br/>Rerank<br/>Cohere · top-5"]
+        ContextWindow["Context<br/>Assembly<br/>token budget<br/>dedup · order"]
+        Generate["Generate<br/>GPT-4o<br/>stream"]
+        OutputGuard["Output<br/>Guardrail<br/>hallucination<br/>toxicity"]
         Respond["Stream Answer<br/>+ Citations"]
-        Feedback["User Feedback<br/>thumbs up/down → eval loop"]
+        Feedback["Feedback<br/>👍/👎<br/>→ eval loop"]
 
-        Query --> Guard --> Rewrite --> Route
-        Route --> HybridSearch --> Rerank --> ContextWindow --> Generate --> OutputGuard --> Respond --> Feedback
+        Query --> Guard --> Rewrite --> Route --> HybridSearch --> Rerank --> ContextWindow --> Generate --> OutputGuard --> Respond --> Feedback
     end
 
     style Ingestion fill:#f0f4ff,stroke:#1D4ED8,color:#000
