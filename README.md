@@ -104,12 +104,19 @@ graph LR
 
     subgraph Retrieval["💬 Query & Response"]
         Query["User Question"]
+        Guard["Input Guardrail<br/>prompt injection · PII · length"]
+        Rewrite["Query Rewrite<br/>expand acronyms · resolve coreference"]
         Route["Route<br/>GPT-4o-mini classifier"]
-        Retrieve["Retrieve<br/>Pinecone top-k=20"]
+        HybridSearch["Hybrid Search<br/>semantic (Pinecone top-k=20)<br/>+ BM25 keyword scoring"]
+        Rerank["Cross-Encoder Rerank<br/>Cohere Rerank · top-5"]
+        ContextWindow["Context Assembly<br/>token budget · dedup · order"]
         Generate["Generate<br/>GPT-4o stream"]
+        OutputGuard["Output Guardrail<br/>hallucination check · toxicity"]
         Respond["Stream Answer<br/>+ Citations"]
+        Feedback["User Feedback<br/>thumbs up/down → eval loop"]
 
-        Query --> Route --> Retrieve --> Generate --> Respond
+        Query --> Guard --> Rewrite --> Route
+        Route --> HybridSearch --> Rerank --> ContextWindow --> Generate --> OutputGuard --> Respond --> Feedback
     end
 
     style Ingestion fill:#f0f4ff,stroke:#1D4ED8,color:#000
