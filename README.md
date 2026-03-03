@@ -93,11 +93,12 @@ The core of the system is a two-phase pipeline: **ingestion** (upload-time) and 
 ```mermaid
 graph LR
     subgraph Ingestion["📄 Document Ingestion"]
+        direction LR
         Upload["Upload PDF"]
-        Parse["Parse<br/>Azure DI or pdfplumber"]
-        Chunk["Chunk<br/>512 tokens, 64 overlap"]
-        Embed["Embed<br/>text-embedding-3-large"]
-        Store["Store<br/>Pinecone + Supabase"]
+        Parse["Parse<br/>Azure DI<br/>or pdfplumber"]
+        Chunk["Chunk<br/>512 tokens<br/>64 overlap"]
+        Embed["Embed<br/>text-embedding<br/>-3-large"]
+        Store["Store<br/>Pinecone<br/>+ Supabase"]
 
         Upload --> Parse --> Chunk --> Embed --> Store
     end
